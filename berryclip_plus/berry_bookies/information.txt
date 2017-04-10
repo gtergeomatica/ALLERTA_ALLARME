@@ -1,0 +1,23 @@
+About Me:
+
+A raw beginner in many ways but an old one, I'm a retired languages teacher with no technical background or qualifications. I started with Atari Basic and BBC Basic in 1983, in my mid-30s. Later, I dabbled in Flash Actionscript for quite a while , mostly to make resources for language learning/teaching.
+
+I bought a Pi. I've never done any soldering so I bought a Berryclip. Never done any Python, but I very quickly got to like its "natural" uncomplicated syntax and power. I don't suppose that's unusual!
+
+Anyway, this is my first go at Python and GPIO with Berryclip. I am not yet into tkinter so I just used the shell and the Berryclip, and also I couldn't see a cross-platform way to get key presses without <Enter>. So it is a very simple thing and an example of a beginner's learning process.
+
+About Berryclip Bookies for Python 2.7:
+
+Simple horse racing simulators have been around forever - no claims to originality!
+
+- 6 horses in every race, each with appropriate name and odds
+- "cyclical" betting routine uses Berryclip leds and switch
+- fixed bet amount (can be changed in the code)
+- simple race progress display in Shell and also via Berryclip leds
+- totally random winner
+- race until you get fed up or run out of funds
+- final feedback
+
+--------------------------------------
+I've learned quite a bit so far and had a lot of fun - thanks, Matt!
+Still a raw beginner, so if anyone reading this has any tips for improvements, please email me: jim@dastor.org.uk
