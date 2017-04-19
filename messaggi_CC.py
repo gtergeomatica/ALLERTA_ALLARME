@@ -47,6 +47,10 @@ print 'Socket created'
 #Bind socket to local host and port
 s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
+
+
+
+
 while True:
     try:
         s.bind((HOST, PORT))
@@ -63,15 +67,38 @@ print 'Socket bind complete'
 s.listen(10)
 print 'Socket now listening'
 
+# set non blocking mode per gestire l'accept con un try-except
+s.setblocking(0)
+
+start = time.time()
+print start
+
 #now keep talking with the client
 while True:
     #wait to accept a connection - blocking call
     #da testare se il server non manda dati come nitarlo accendendo comunque una luce...
-    print "fin qua ci arriva"    
-    conn, addr = s.accept()
+    #print "fin qua ci arriva"
+    try:    
+        conn, addr = s.accept()
+    except: 
+        done = time.time()
+        differenza = done-start
+        if differenza > 3:
+            print "Ritardo > 3 secondi... "
+            GPIO.output(4 , False)
+            GPIO.output(9 , False)
+            GPIO.output(22, False)
+            GPIO.output(4 , True)
+            GPIO.output(9 , True)
+            GPIO.output(22, True)
+            time.sleep(1)
+        continue
+    break
     #print conn    
     # calcolo ora UTC nello stesso formato dell'output di RTKLIB
     dt=datetime.utcnow()
+    #sovrascrivo il time start per il check sul funzionamento degradato
+    start = time.time()
     # Formatting datetime
     ora=dt.strftime("%Y/%m/%d|%H:%M:%S.%f")
     print ora
