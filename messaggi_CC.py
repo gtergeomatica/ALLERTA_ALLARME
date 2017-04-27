@@ -3,7 +3,13 @@
 # roberto.marzocchi@gter.it
 
 
-
+# ricezione messaggi da CC con i seguenti campi separati da |:
+# - numero_client
+# - stringa di 0,1,2 con allerte allarmi
+# - sistema degradato
+# - allarme generico
+# - near alarm
+ 
 '''
     Simple socket server using threads
 '''
@@ -12,23 +18,33 @@ import socket
 import sys
 import time
 import RPi.GPIO as GPIO
+
+
+
 # Tell GPIO library to use GPIO references
 GPIO.setmode(GPIO.BCM)
 
+timeLed = 0.5;
+
 print "Setup GPIO pins as inputs and outputs"
 
-# Set LED GPIO pins as outputs
-GPIO.setup(4 , GPIO.OUT)
-GPIO.setup(17, GPIO.OUT)
-GPIO.setup(22, GPIO.OUT)
-GPIO.setup(10, GPIO.OUT)
-GPIO.setup(9 , GPIO.OUT)
-GPIO.setup(11, GPIO.OUT)
+try:
+    # Set LED GPIO pins as outputs
+    GPIO.setup(4 , GPIO.OUT) #rosso
+    GPIO.setup(17, GPIO.OUT)
+    GPIO.setup(22, GPIO.OUT) #giallo
+    GPIO.setup(10, GPIO.OUT)
+    GPIO.setup(9 , GPIO.OUT) #verde
+    GPIO.setup(11, GPIO.OUT)
 
-# Set Switches GPIO as input
-GPIO.setup(7 , GPIO.IN)
-GPIO.setup(25, GPIO.IN)
+    # Set Buzzer GPIO pins as output
+    GPIO.setup(8 , GPIO.OUT)
 
+    # Set Switches GPIO as input
+    GPIO.setup(7 , GPIO.IN)
+    GPIO.setup(25, GPIO.IN)
+except: 
+    print "Led gia configurati"
 
 
 
@@ -72,9 +88,31 @@ s.setblocking(0)
 
 start = time.time()
 print start
+GPIO.output(4 , False) 
+GPIO.output(17 , False)
+GPIO.output(22 , False)
+GPIO.output(10, False)
+GPIO.output(9, False)
+GPIO.output(11, False)
+
+GPIO.output(8, False)
+
+
+time.sleep(timeLed)
+#GPIO.output(4 , True)
+#GPIO.output(9 , True)
+#GPIO.output(22, True)
+
+#quit()
 
 #now keep talking with the client
 while True:
+    #GPIO.output(4 , False)
+    #GPIO.output(9 , False)
+    #GPIO.output(22, False)
+
+
+
     #wait to accept a connection - blocking call
     #da testare se il server non manda dati come nitarlo accendendo comunque una luce...
     #print "fin qua ci arriva"
@@ -84,16 +122,19 @@ while True:
         done = time.time()
         differenza = done-start
         if differenza > 3:
-            print "Ritardo > 3 secondi... "
             GPIO.output(4 , False)
             GPIO.output(9 , False)
             GPIO.output(22, False)
+            try:
+                GPIO.output(8, False)      
+            time.sleep(timeLed)
+            print "Ritardo > 3 secondi... "
             GPIO.output(4 , True)
             GPIO.output(9 , True)
             GPIO.output(22, True)
-            time.sleep(1)
+            time.sleep(timeLed)
         continue
-    break
+    #break
     #print conn    
     # calcolo ora UTC nello stesso formato dell'output di RTKLIB
     dt=datetime.utcnow()
@@ -112,10 +153,14 @@ while True:
     print stringa
     i=0
     allarme=-1
-    GPIO.output(22 , False)
+    GPIO.output(22 ,False)
     GPIO.output(9 , False)
     GPIO.output(4 , False)
-    time.sleep(0.5)
+    #GPIO.output(11 , False)
+    GPIO.output(10 ,False)
+    GPIO.output(17 ,False)    
+    time.sleep(timeLed)
+    #cerco gli allarmi dell'algoritmo
     while (i<int(dati[0])):
         #print stringa[i]
         if (int(stringa[i])>=0):
@@ -128,6 +173,7 @@ while True:
     print "allarme=",allarme
     if allarme==0:
         print "accendo il verde"
+        GPIO.output(8 , False)      
         GPIO.output(4 , False)
         GPIO.output(22 , False)
         GPIO.output(9 , True)
@@ -136,13 +182,39 @@ while True:
         GPIO.output(4 , False)
         GPIO.output(9 , False)
         GPIO.output(22, True)
+        GPIO.output(8 , True)
     elif allarme==2:
-        print "accendo il ROSSO"
+        print "accendo il ROSSO e il buzzer"
         GPIO.output(22 , False)
         GPIO.output(9, False)         
+        GPIO.output(8 , True)
         GPIO.output(4 , True)
-    time.sleep(0.5)
-    #conn.send('OK\0')
+    # cerco funzionamento degradato
+    if int(dati[2])==1:
+        GPIO.output(10 , True)
+    else:
+        GPIO.output(10 , False)
+
+    # cerco allarme generico
+    if int(dati[3])>0:
+        GPIO.output(17 , True)
+        GPIO.output(8 , True)
+    elif allarme>0:
+        print "accendo l'altro rosso"
+        GPIO.output(17 , False)
+    else :
+        print "spengo il buffer"
+        GPIO.output(17 , False)
+        GPIO.output(8 , False)
+
+    # cerco near alarm
+    if (int(dati[4])>0 and allarme==0):
+        GPIO.output(17 , True)
+    else :
+        GPIO.output(17 , False)
+        
+    time.sleep(timeLed)
+    conn.send('OK\0')
 
 s.close()
 
