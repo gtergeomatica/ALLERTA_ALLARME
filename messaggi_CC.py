@@ -126,7 +126,9 @@ while True:
             GPIO.output(9 , False)
             GPIO.output(22, False)
             try:
-                GPIO.output(8, False)      
+                GPIO.output(8, False)
+            except:
+                print ""      
             time.sleep(timeLed)
             print "Ritardo > 3 secondi... "
             GPIO.output(4 , True)
