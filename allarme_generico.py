@@ -1,6 +1,6 @@
 #!/usr/bin/python
 #   Gter Copyleft 2017
-#   
+#   Roberto Marzocchi
 #
 #
 #   Modified by an priginal project
@@ -49,9 +49,30 @@ from datetime import datetime, date
 
 # in questo modo gli faccio leggere i dati da terminale (IP address e ID apparato)
 #print(sys.argv)
-TCP_IP = sys.argv[1]
+#TCP_IP = sys.argv[1]
 # qua specifico l'ID dell'apparato
-id_apparato=sys.argv[2]
+#id_apparato=sys.argv[2]
+
+#in questo modo leggo invece i messaggi da file 
+nomefile1="/home/pi/NARVALO/DATI/CONF/narvalo_conf.dat"
+print "\n\nReading the %s file " %nomefile1
+
+
+
+# legge dal file coordinate 
+parametri=[]
+
+i=0
+cc=0
+for riga in file(nomefile1): # lettura file 
+	#print riga
+	#line = riga
+	parametri.append(riga)
+	i+=1
+
+id_apparato=parametri[0]
+TCP_IP=parametri[2]
+
 
 print "#######################################"
 print "Id apparato:", id_apparato
