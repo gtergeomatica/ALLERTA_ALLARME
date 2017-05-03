@@ -34,23 +34,38 @@ import requests
 
 
 #library added by GTER
+import os,sys,shutil,re,glob
 import socket
 #import time
 from datetime import datetime, date
+
 
 
 #######################################################################################
 # questa e' la parte da inizializzare in base a id_apparato e IP centro di controllo
 #socket data per inviare dati al CC
 #TCP_IP is the address of the control center server (TBM)
-TCP_IP = '192.168.2.126'
+#TCP_IP = '192.168.2.126'
+
+# in questo modo gli faccio leggere i dati da terminale (IP address e ID apparato)
+#print(sys.argv)
+TCP_IP = sys.argv[1]
+# qua specifico l'ID dell'apparato
+id_apparato=sys.argv[2]
+
+print "#######################################"
+print "Id apparato:", id_apparato
+print "IP CC Anticollisione:", TCP_IP
+print "#######################################"
+
+################
+# fissi 
 TCP_PORT = 8081
 BUFFER_SIZE = 1024
 check_connection=0
 
 
-# qua specifico l'ID dell'apparato
-id_apparato=5
+
 
 #error_type
 error_type=5
@@ -91,7 +106,7 @@ try:
   while True :
    
     if GPIO.input(7)==1:
-        print "  Button S1 pressed - messaggio inviato al CC!"
+        print "  Button S1 pressed!"
         MESSAGE = "A|1"
         try:
             if (check_connection==0):
@@ -101,7 +116,7 @@ try:
             data = s.recv(BUFFER_SIZE)
             #s.close()
             check_connection=1
-            print "received data:", data
+            print "Messaggio inviato al CC - Risposta:", data
         except:
             print "Socket connection failed!"
             check_connection=0
@@ -125,7 +140,7 @@ try:
         #print "Press a button (CTRL-C to exit)"
 
     if GPIO.input(25)==1:
-        print "  Button S2 pressed - messaggio inviato al CC!"
+        print "  Button S2 pressed!"
         MESSAGE = "A|2"
         try:
             if (check_connection==0):
@@ -135,7 +150,7 @@ try:
             data = s.recv(BUFFER_SIZE)
             #s.close()
             check_connection=1
-            print "received data:", data
+            print "Messaggio inviato al CC - Risposta:", data
         except:
             print "Socket connection failed!"
             check_connection=0
