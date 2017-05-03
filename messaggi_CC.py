@@ -24,7 +24,9 @@ import RPi.GPIO as GPIO
 # Tell GPIO library to use GPIO references
 GPIO.setmode(GPIO.BCM)
 
-timeLed = 0.5;
+
+
+timeLed = 0.25;
 
 print "Setup GPIO pins as inputs and outputs"
 
@@ -185,6 +187,8 @@ while True:
         GPIO.output(9 , False)
         GPIO.output(22, True)
         GPIO.output(8 , True)
+        time.sleep(timeLed/4)
+        GPIO.output(8 , False)
     elif allarme==2:
         print "accendo il ROSSO e il buzzer"
         GPIO.output(22 , False)
@@ -199,15 +203,17 @@ while True:
 
     # cerco allarme generico
     if int(dati[3])>0:
+        print "ALLARME GENERICO: accendo l'altro rosso e il buzzer"
         GPIO.output(17 , True)
         GPIO.output(8 , True)
-    elif allarme>0:
-        print "accendo l'altro rosso"
-        GPIO.output(17 , False)
-    else :
-        print "spengo il buffer"
-        GPIO.output(17 , False)
-        GPIO.output(8 , False)
+    else:        
+        if allarme>0 :
+            print "Controllo che il rosso dell'allarme generico sia spento."
+            GPIO.output(17 , False)
+        else :
+            print "Se non ci sono allarmi ne' generici ne' da CC spengo il buzzer"
+            GPIO.output(17 , False)
+            GPIO.output(8 , False)
 
     # cerco near alarm
     if (int(dati[4])>0 and allarme==0):
