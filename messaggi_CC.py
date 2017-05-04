@@ -158,7 +158,7 @@ while True:
     print "dati0=",dati[0]
     print stringa
     i=0
-    allarme=-1
+    allarme=0
     GPIO.output(22 ,False)
     GPIO.output(9 , False)
     GPIO.output(4 , False)
@@ -169,12 +169,13 @@ while True:
     #cerco gli allarmi dell'algoritmo
     while (i<int(dati[0])):
         #print stringa[i]
-        if (int(stringa[i])>=0):
+        if (int(stringa[i])>0):
             #devo gestire gli allarmi
-            if (allarme<=1):
+            if (int(stringa[i])==2):
                 allarme=int(stringa[i])
+                break
             else:                 
-                allarme=2
+                allarme=int(stringa[i])
         i=i+1
     print "allarme=",allarme
     if allarme==0:

@@ -57,8 +57,6 @@ from datetime import datetime, date
 nomefile1="/home/pi/NARVALO/DATI/CONF/narvalo_conf.dat"
 print "\n\nReading the %s file " %nomefile1
 
-
-
 # legge dal file coordinate 
 parametri=[]
 
@@ -67,7 +65,7 @@ cc=0
 for riga in file(nomefile1): # lettura file 
 	#print riga
 	#line = riga
-	parametri.append(riga)
+	parametri.append(riga.strip('\n'))
 	i+=1
 
 id_apparato=parametri[0]
