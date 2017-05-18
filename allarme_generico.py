@@ -96,7 +96,7 @@ error_type=5
 headers1 = {
     'Content-type': 'application/x-www-form-urlencoded',
 }
-url2 = "http://40.68.169.138/Narvalo/NarvaloWS/api/Narvalo/AddDiagnostica"
+url2 = "http://narvalo.dyndns.org/Narvalo/NarvaloWS/api/Narvalo/SetAllarme"
 
 
 
@@ -120,7 +120,6 @@ print "Press a button"
 # the user seeing lots of unnecessary error
 # messages.
 try:
-
   # Loop until users quits with CTRL-C
   while True :
    
@@ -130,6 +129,7 @@ try:
         try:
             if (check_connection==0):
                 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                s.settimeout(2)
                 s.connect((TCP_IP, TCP_PORT))
             s.send(MESSAGE)
             data = s.recv(BUFFER_SIZE)
@@ -143,15 +143,18 @@ try:
             dt=datetime.utcnow()
             # Formatting datetime
             day_time=dt.strftime("%Y%m%d %H:%M:%S")
+            #day_time=dt.strftime("%d:%m:%Y %H:%M:%S")
             # invio l'allarme al concentratore
             data1 = {
-            'Description': 'Schiacciato tasto ALLARME 1',
-            'IdType': error_type,
-            'IdApparato': id_apparato,
-            'DateTime' : day_time
+            'desc': 'Allarme Generico',
+            #'IdType': error_type,
+            'apparati': id_apparato,
+            'utc' : day_time
             }
+            print data1;
             r = requests.post(url2, data=data1, headers=headers1)
             result = r.text
+            print "Stampo la risposta del concentratore"
             print result
         except:
             print "Concentratore non avvisato" 
@@ -164,6 +167,7 @@ try:
         try:
             if (check_connection==0):
                 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                s.settimeout(2)
                 s.connect((TCP_IP, TCP_PORT))
             s.send(MESSAGE)
             data = s.recv(BUFFER_SIZE)
@@ -179,13 +183,14 @@ try:
             day_time=dt.strftime("%Y%m%d %H:%M:%S")
             # invio l'allarme al concentratore
             data1 = {
-            'Description': 'Schiacciato tasto ALLARME 1',
-            'IdType': error_type,
-            'IdApparato': id_apparato,
-            'DateTime' : day_time
+            'desc': 'Allarme Generico',
+            #'IdType': error_type,
+            'apparati': id_apparato,
+            'utc' : day_time
             }
             r = requests.post(url2, data=data1, headers=headers1)
             result = r.text
+            print "Stampo la risposta del concentratore"
             print result
         except:
             print "Concentratore non avvisato"
