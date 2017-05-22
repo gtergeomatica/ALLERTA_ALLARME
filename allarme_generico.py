@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#! /usr/bin/env python
 #   Gter Copyleft 2017
 #   Roberto Marzocchi
 #
