@@ -27,8 +27,13 @@ import RPi.GPIO as GPIO
 GPIO.setmode(GPIO.BCM)
 
 
-
-timeLed = 0.25;
+##############################################
+# SETTINGS
+timeLed = 0.25
+blocco_cicalino=10
+old_dati="00"
+k=0
+##############################################
 
 print "Setup GPIO pins as inputs and outputs"
 
@@ -157,9 +162,15 @@ while True:
         check_stringa=0
     except:
         check_stringa=1
-    if check_stringa==0:    
-        print "dati0=",dati[0]
-        print stringa
+    if check_stringa==0:
+        if old_dati==dati[1]:
+            k=k+1
+        else:
+            k=0
+        old_dati=dati[1]    
+        #print "dati0=",dati[0]
+        #print stringa
+        print "k=", k
         ora_server=time.strptime(dati[5],"%Y%m%d %H:%M:%S")
         ora_client1=time.strptime(ora,"%Y/%m/%d %H:%M:%S.%f")
         #print "\nora server=", ora_server
@@ -200,14 +211,16 @@ while True:
                 GPIO.output(4 , False)
                 GPIO.output(9 , False)
                 GPIO.output(22, True)
-                GPIO.output(8 , True)
-                time.sleep(timeLed/4)
-                GPIO.output(8 , False)
+                if (k <= blocco_cicalino):
+                    GPIO.output(8 , True)
+                    time.sleep(timeLed/4)
+                    GPIO.output(8 , False)
             elif allarme==2:
                 print "accendo il ROSSO e il buzzer"
                 GPIO.output(22 , False)
-                GPIO.output(9, False)         
-                GPIO.output(8 , True)
+                GPIO.output(9, False)
+                if (k <= blocco_cicalino): 
+                    GPIO.output(8 , True)
                 GPIO.output(4 , True)
             # cerco funzionamento degradato
             if int(dati[2])==1:
