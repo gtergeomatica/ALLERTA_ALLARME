@@ -214,7 +214,7 @@ while True:
                 if (k <= blocco_cicalino):
                     GPIO.output(8 , True)
                     time.sleep(timeLed/4)
-                    GPIO.output(8 , False)
+                GPIO.output(8 , False)
             elif allarme==2:
                 print "accendo il ROSSO e il buzzer"
                 GPIO.output(22 , False)
