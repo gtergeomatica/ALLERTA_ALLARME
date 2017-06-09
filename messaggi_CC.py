@@ -150,7 +150,8 @@ while True:
     #sovrascrivo il time start per il check sul funzionamento degradato
     start = time.time()
     # Formatting datetime
-    ora=ora_client.strftime("%Y/%m/%d %H:%M:%S.%f")
+    ora=ora_client.strftime("%Y/%m/%d %H:%M:%S.%f") 
+    # ora=dt.strftime("%Y/%m/%d %H:%M:%S.%f") #test sui tempi
     print "\nora=",ora
     print 'Connected with ' + addr[0] + ':' + str(addr[1])
     #data = unicode(conn.recv(BUFFER_SIZE))
@@ -172,12 +173,13 @@ while True:
         #print stringa
         print "k=", k
         ora_server=time.strptime(dati[5],"%Y%m%d %H:%M:%S")
+        #ora_server=time.strptime(dati[5],"%Y/%m/%d %H:%M:%S.%f")
         ora_client1=time.strptime(ora,"%Y/%m/%d %H:%M:%S.%f")
         #print "\nora server=", ora_server
         #print "\nora client=", ora_client1
         differenza=time.mktime(ora_client1)-time.mktime(ora_server)
         print "*******************\ndifferenza=", differenza
-        print "\n*******************\n"
+        print "*******************\n"
         if differenza < 2:
             i=0
             allarme=0
