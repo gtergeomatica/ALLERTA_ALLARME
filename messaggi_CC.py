@@ -73,6 +73,15 @@ print 'Socket created'
 s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
 
+output_test=1 # LEGEND: 1 test ON - 0 test OFF
+
+if output_test == 1:
+    ora_client0=datetime.now()
+    ora_file=ora_client0.strftime("%Y_%m_%d_%H_%M_%S") 
+    nome_file="/home/pi/NARVALO/DATI/output_test_time_%s.csv" % ora_file
+    print nome_file
+    out_file = open(nome_file,"w")
+    out_file.write("date_time_GNSS, date_time_led, differenza (s)\n")
 
 
 
@@ -177,10 +186,10 @@ while True:
         ora_client1=time.strptime(ora,"%Y/%m/%d %H:%M:%S.%f")
         #print "\nora server=", ora_server
         #print "\nora client=", ora_client1
-        differenza=time.mktime(ora_client1)-time.mktime(ora_server)
-        print "*******************\ndifferenza=", differenza
+        differenza2=time.mktime(ora_client1)-time.mktime(ora_server)
+        print "*******************\ndifferenza=", differenza2
         print "*******************\n"
-        if differenza < 2:
+        if differenza2 < 2:
             i=0
             allarme=0
             GPIO.output(22 ,False)
@@ -252,6 +261,8 @@ while True:
                 
             #time.sleep(timeLed)
             conn.send('OK\0')
+            if output_test == 1:
+                out_file.write("%s, %s, %f\n" %(dati[5],ora,differenza2) )
 
 s.close()
 
