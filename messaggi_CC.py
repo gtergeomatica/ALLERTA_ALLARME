@@ -159,8 +159,8 @@ while True:
     #sovrascrivo il time start per il check sul funzionamento degradato
     start = time.time()
     # Formatting datetime
-    ora=ora_client.strftime("%Y/%m/%d %H:%M:%S.%f") 
-    # ora=dt.strftime("%Y/%m/%d %H:%M:%S.%f") #test sui tempi
+    #ora=ora_client.strftime("%Y/%m/%d %H:%M:%S.%f") 
+    ora=dt.strftime("%Y/%m/%d %H:%M:%S.%f") #test sui tempi
     print "\nora=",ora
     print 'Connected with ' + addr[0] + ':' + str(addr[1])
     #data = unicode(conn.recv(BUFFER_SIZE))
