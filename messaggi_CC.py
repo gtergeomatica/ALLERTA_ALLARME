@@ -172,8 +172,8 @@ while True:
         #print "dati0=",dati[0]
         #print stringa
         print "k=", k
-        ora_server=time.strptime(dati[5],"%Y%m%d %H:%M:%S")
-        #ora_server=time.strptime(dati[5],"%Y/%m/%d %H:%M:%S.%f")
+        #ora_server=time.strptime(dati[5],"%Y%m%d %H:%M:%S")
+        ora_server=time.strptime(dati[5],"%Y/%m/%d %H:%M:%S.%f")
         ora_client1=time.strptime(ora,"%Y/%m/%d %H:%M:%S.%f")
         #print "\nora server=", ora_server
         #print "\nora client=", ora_client1
